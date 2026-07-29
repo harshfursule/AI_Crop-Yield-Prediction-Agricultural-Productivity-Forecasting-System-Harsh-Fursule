@@ -1,0 +1,4 @@
+ml/model.pkl
+*.pkl
+frontend/node_modules/
+__pycache__/
