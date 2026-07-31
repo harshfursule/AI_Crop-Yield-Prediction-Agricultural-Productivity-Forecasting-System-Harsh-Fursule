@@ -18,6 +18,11 @@ db = client[DATABASE_NAME]
 # Select collections
 users_collection = db["users"]
 predictions_collection = db["predictions"]
+farms_collection = db["farms"]
+harvest_history_collection = db["harvest_history"]
+soil_tests_collection = db["soil_tests"]
+weather_logs_collection = db["weather_logs"]
+prescriptions_collection = db["prescriptions"]
 
 
 # Test MongoDB connection

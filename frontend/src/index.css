@@ -165,4 +165,29 @@ body {
 
 .card:hover {
   border-color: var(--border-hover);
+  box-shadow: var(--shadow-md);
 }
+
+/* Form inputs styling */
+input, select, textarea {
+  font-family: inherit;
+  font-size: 0.95rem;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+input:focus, select:focus, textarea:focus {
+  border-color: var(--brand-green) !important;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15) !important;
+}
+
+/* Responsive Table styling */
+table tbody tr:hover {
+  background-color: rgba(16, 185, 129, 0.04) !important;
+}
+
+/* Smooth Tab and Card transitions */
+.card, button, select, input {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
