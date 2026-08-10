@@ -132,11 +132,12 @@ function Navbar({ onOpenProfile }) {
                 style={{ display: "flex", alignItems: "center", gap: "10px", cursor: "pointer" }}
                 title="View & Edit Profile"
               >
-                <img
-                  src={user.avatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.name}`}
-                  alt={user.name}
-                  style={{ width: "36px", height: "36px", borderRadius: "50%", border: "2px solid var(--brand-green)" }}
-                />
+                <div style={{
+                  width: "36px", height: "36px", borderRadius: "50%", border: "2px solid var(--brand-green)",
+                  display: "flex", alignItems: "center", justifyContent: "center", background: "var(--bg-primary)"
+                }}>
+                  <User size={18} color="var(--brand-green)" />
+                </div>
                 <div style={{ textAlign: "left", display: "none", smDisplay: "block" }}>
                   <div style={{ fontSize: "0.875rem", fontWeight: 600, color: "var(--text-primary)" }}>{user.name}</div>
                   <span style={{

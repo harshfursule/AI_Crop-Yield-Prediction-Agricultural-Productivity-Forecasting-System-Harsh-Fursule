@@ -211,7 +211,7 @@ function Dashboard() {
         {/* TAB 1: AI YIELD PREDICTOR */}
         {/* ======================================================== */}
         {activeTab === "predictor" && (
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(340px, 1fr))", gap: "28px" }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: "28px" }}>
             {/* INPUT FORM CARD */}
             <form onSubmit={handlePredict} className="card" style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
               <div style={{ display: "flex", alignItems: "center", gap: "12px", borderBottom: "1px solid var(--border-color)", paddingBottom: "16px" }}>
