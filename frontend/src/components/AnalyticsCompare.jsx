@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { BarChart3, TrendingUp, Award, Layers, RefreshCw, FileText, CheckCircle2 } from "lucide-react";
-
+import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
 function AnalyticsCompare({ token }) {
   const [trends, setTrends] = useState([]);
   const [crop1, setCrop1] = useState("Wheat");
@@ -182,6 +182,29 @@ function AnalyticsCompare({ token }) {
             </div>
           ))}
         </div>
+
+        {/* Productivity Trends Line Chart */}
+        {trends.length > 0 && (
+          <div className="card" style={{ marginTop: "24px", padding: "20px" }}>
+            <h4 style={{ fontSize: "1rem", fontWeight: 700, marginBottom: "16px", color: "var(--text-secondary)" }}>
+              Yield & Efficiency Over Time
+            </h4>
+            <div style={{ height: "300px", width: "100%" }}>
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart data={trends} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="var(--border-color)" />
+                  <XAxis dataKey="season" stroke="var(--text-secondary)" />
+                  <YAxis yAxisId="left" stroke="#10b981" />
+                  <YAxis yAxisId="right" orientation="right" stroke="#8b5cf6" />
+                  <Tooltip contentStyle={{ backgroundColor: "var(--bg-card)", borderColor: "var(--border-color)", color: "var(--text-primary)" }} />
+                  <Legend />
+                  <Line yAxisId="left" type="monotone" dataKey="avg_yield_ton_per_ha" stroke="#10b981" strokeWidth={3} name="Yield (ton/ha)" activeDot={{ r: 8 }} />
+                  <Line yAxisId="right" type="monotone" dataKey="efficiency" stroke="#8b5cf6" strokeWidth={3} name="Efficiency (%)" />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Side-by-Side Crop Comparison Tool */}
@@ -222,7 +245,8 @@ function AnalyticsCompare({ token }) {
         </div>
 
         {comparison ? (
-          <div style={{
+          <>
+            <div style={{
             display: "grid",
             gridTemplateColumns: "1fr 1fr",
             gap: "20px"
@@ -287,6 +311,36 @@ function AnalyticsCompare({ token }) {
               </div>
             </div>
           </div>
+          
+          {/* Crop Comparison Bar Chart */}
+          <div style={{ marginTop: "24px", padding: "20px", borderTop: "1px solid var(--border-color)" }}>
+            <h4 style={{ fontSize: "1rem", fontWeight: 700, marginBottom: "16px", color: "var(--text-secondary)" }}>
+              Expected Yield Comparison (tons/ha)
+            </h4>
+            <div style={{ height: "250px", width: "100%" }}>
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart
+                  data={[
+                    {
+                      name: "Expected Yield",
+                      [crop1]: comparison[crop1]?.avg_yield_ton_per_ha || 0,
+                      [crop2]: comparison[crop2]?.avg_yield_ton_per_ha || 0,
+                    }
+                  ]}
+                  margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+                >
+                  <CartesianGrid strokeDasharray="3 3" stroke="var(--border-color)" />
+                  <XAxis dataKey="name" stroke="var(--text-secondary)" />
+                  <YAxis stroke="var(--text-secondary)" />
+                  <Tooltip cursor={{ fill: "var(--bg-primary)" }} contentStyle={{ backgroundColor: "var(--bg-card)", borderColor: "var(--border-color)", color: "var(--text-primary)" }} />
+                  <Legend />
+                  <Bar dataKey={crop1} fill="#10b981" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey={crop2} fill="#3b82f6" radius={[4, 4, 0, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+          </>
         ) : (
           <div style={{ textAlign: "center", padding: "40px", color: "var(--text-muted)" }}>
             Loading comparison metrics...
