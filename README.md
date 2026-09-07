@@ -64,25 +64,33 @@ YieldSenseAI/
 
 ---
 
-## 🚀 Quickstart Guide
+## 🚀 Quickstart & Deployment Options
 
-### 1. Backend Setup & Run
+### Option A: 1-Click Docker Compose Launch (Production Ready)
 ```powershell
+docker compose up --build -d
+```
+- Frontend: [http://localhost:3000](http://localhost:3000)
+- Backend API Docs: [http://localhost:8000/docs](http://localhost:8000/docs)
+- Health Probe: [http://localhost:8000/api/health](http://localhost:8000/api/health)
+
+### Option B: Local Development Setup
+```powershell
+# Backend
 cd backend
 python -m pip install -r requirements.txt
 python -m uvicorn main:app --reload --port 8000
-```
-API Documentation will be accessible at: `http://localhost:8000/docs`
 
-### 2. Frontend Setup & Run
-```powershell
-cd frontend
+# Frontend
+cd ../frontend
 npm install
 npm run dev
 ```
-Web application will launch at: `http://localhost:5173`
 
-### 3. Run Milestone 4 Model Validation Suite
+### Option C: Cloud Environments (Render, AWS, GCP, Railway)
+Refer to the complete [**Deployment Guide (`DEPLOYMENT.md`)**](DEPLOYMENT.md) and infrastructure-as-code [**`render.yaml`**](render.yaml).
+
+### Run Milestone 4 Model Validation Suite
 ```powershell
 python ml/validate_models.py
 ```
@@ -90,10 +98,11 @@ This re-runs the full 5-fold cross-validation, subgroup analysis, and regenerate
 
 ---
 
-## 🔒 Security & Admin Features
-- Role-based Access Control (RBAC): `admin` and `user` roles
-- Real-time Security Audit Trail recording all authentication & data events
-- Interactive Milestone 4 Model Validation dashboard tab in the Admin Portal with live performance charts, sub-group accuracy tables, and instant report download.
+## 🔒 Security, Admin & Performance Features
+- **Performance Optimization**: GZip compression middleware, route code-splitting with `React.lazy()`, sub-millisecond inference (<1ms).
+- **Role-based Access Control (RBAC)**: `admin` and `user` roles with JWT authentication.
+- **Security Audit Trail**: Real-time logging of authentication and administrative actions.
+- **Interactive Validation Portal**: Live model comparison leaderboards, cross-validation metrics, and report download.
 
 ---
 

@@ -1,10 +1,13 @@
 import axios from "axios";
 
+export const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
+
 const api = axios.create({
-  baseURL: "http://127.0.0.1:8000",
+  baseURL: API_BASE_URL,
   headers: {
     "Content-Type": "application/json",
   },
+  timeout: 15000,
 });
 
 // Automatically attach JWT token to every request
@@ -31,7 +34,9 @@ api.interceptors.response.use(
       localStorage.removeItem("token");
       localStorage.removeItem("user");
 
-      window.location.href = "/login";
+      if (window.location.pathname !== "/login" && window.location.pathname !== "/admin-login" && window.location.pathname !== "/register") {
+        window.location.href = "/login";
+      }
     }
 
     return Promise.reject(error);

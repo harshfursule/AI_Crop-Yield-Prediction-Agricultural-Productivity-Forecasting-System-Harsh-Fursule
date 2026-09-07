@@ -1,0 +1,35 @@
+# Render Infrastructure Blueprint for YieldSense AI Platform
+services:
+  # 1. FastAPI Backend Web Service
+  - type: web
+    name: yieldsense-backend
+    runtime: python
+    buildCommand: "cd backend && pip install -r requirements.txt"
+    startCommand: "cd backend && uvicorn main:app --host 0.0.0.0 --port $PORT"
+    envVars:
+      - key: PORT
+        value: 8000
+      - key: SECRET_KEY
+        generateValue: true
+      - key: ALGORITHM
+        value: HS256
+      - key: ALLOWED_ORIGINS
+        value: "*"
+    healthCheckPath: /api/health
+
+  # 2. React + Vite Frontend Static Site
+  - type: web
+    name: yieldsense-frontend
+    runtime: static
+    buildCommand: "cd frontend && npm install && npm run build"
+    staticPublishPath: "./frontend/dist"
+    envVars:
+      - key: VITE_API_URL
+        fromService:
+          type: web
+          name: yieldsense-backend
+          property: host
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html

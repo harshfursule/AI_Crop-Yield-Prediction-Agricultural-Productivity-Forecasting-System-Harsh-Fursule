@@ -338,3 +338,36 @@
     gap: 15px;
   }
 }
+
+/* Tablet and Mobile Breakpoints for Responsive Navigation and Cards */
+@media (max-width: 768px) {
+  .dashboard-navbar {
+    padding: 0 4%;
+    height: auto;
+    min-height: 64px;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .nav-actions {
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .card {
+    padding: 16px !important;
+  }
+
+  table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  .tabs-container {
+    overflow-x: auto;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
