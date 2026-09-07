@@ -1,0 +1,384 @@
+{
+  "timestamp": "2026-09-07T16:33:36.487418",
+  "milestone": "Milestone 4: Week 7 & 8 - Testing, Deployment & Documentation",
+  "task": "Validate prediction models and forecasting accuracy",
+  "execution_time_seconds": 36.22,
+  "dataset_summary": {
+    "total_records": 10000,
+    "features_count": 12,
+    "train_samples": 8000,
+    "test_samples": 2000,
+    "target_variable": "Yield_ton_per_ha",
+    "yield_min": 28.45,
+    "yield_max": 207.21,
+    "yield_mean": 117.89,
+    "yield_std": 37.97
+  },
+  "leaderboard": [
+    {
+      "model_name": "Ridge Regression (L2)",
+      "r2_train": 0.9826,
+      "r2_test": 0.9821,
+      "mae": 4.076,
+      "rmse": 5.081,
+      "mse": 25.813,
+      "mape_pct": 3.99,
+      "explained_variance": 0.9821,
+      "is_production": false
+    },
+    {
+      "model_name": "Linear Regression (OLS)",
+      "r2_train": 0.9826,
+      "r2_test": 0.9821,
+      "mae": 4.077,
+      "rmse": 5.081,
+      "mse": 25.813,
+      "mape_pct": 3.99,
+      "explained_variance": 0.9821,
+      "is_production": false
+    },
+    {
+      "model_name": "Gradient Boosting Regressor",
+      "r2_train": 0.9852,
+      "r2_test": 0.9811,
+      "mae": 4.208,
+      "rmse": 5.219,
+      "mse": 27.233,
+      "mape_pct": 4.12,
+      "explained_variance": 0.9811,
+      "is_production": false
+    },
+    {
+      "model_name": "Random Forest (Production)",
+      "r2_train": 0.9973,
+      "r2_test": 0.9801,
+      "mae": 4.308,
+      "rmse": 5.362,
+      "mse": 28.747,
+      "mape_pct": 4.19,
+      "explained_variance": 0.9801,
+      "is_production": true
+    },
+    {
+      "model_name": "Extra Trees Regressor",
+      "r2_train": 1.0,
+      "r2_test": 0.98,
+      "mae": 4.325,
+      "rmse": 5.373,
+      "mse": 28.871,
+      "mape_pct": 4.21,
+      "explained_variance": 0.98,
+      "is_production": false
+    },
+    {
+      "model_name": "Decision Tree Regressor",
+      "r2_train": 0.9964,
+      "r2_test": 0.9651,
+      "mae": 5.642,
+      "rmse": 7.097,
+      "mse": 50.372,
+      "mape_pct": 5.48,
+      "explained_variance": 0.9651,
+      "is_production": false
+    }
+  ],
+  "cross_validation_5_fold": {
+    "Random Forest (Production)": {
+      "r2_mean": 0.9801,
+      "r2_std": 0.0005,
+      "mae_mean": 4.259,
+      "mae_std": 0.043,
+      "rmse_mean": 5.35,
+      "rmse_std": 0.055,
+      "fold_r2_scores": [
+        0.98,
+        0.9805,
+        0.9805,
+        0.9803,
+        0.9793
+      ]
+    },
+    "Gradient Boosting Regressor": {
+      "r2_mean": 0.9814,
+      "r2_std": 0.0003,
+      "mae_mean": 4.119,
+      "mae_std": 0.053,
+      "rmse_mean": 5.172,
+      "rmse_std": 0.051,
+      "fold_r2_scores": [
+        0.9811,
+        0.9817,
+        0.9818,
+        0.9814,
+        0.9811
+      ]
+    },
+    "Extra Trees Regressor": {
+      "r2_mean": 0.9798,
+      "r2_std": 0.0004,
+      "mae_mean": 4.308,
+      "mae_std": 0.049,
+      "rmse_mean": 5.395,
+      "rmse_std": 0.073,
+      "fold_r2_scores": [
+        0.9799,
+        0.9803,
+        0.9798,
+        0.9799,
+        0.979
+      ]
+    },
+    "Ridge Regression (L2)": {
+      "r2_mean": 0.9824,
+      "r2_std": 0.0002,
+      "mae_mean": 4.0,
+      "mae_std": 0.056,
+      "rmse_mean": 5.029,
+      "rmse_std": 0.064,
+      "fold_r2_scores": [
+        0.9821,
+        0.9827,
+        0.9826,
+        0.9825,
+        0.9823
+      ]
+    },
+    "Linear Regression (OLS)": {
+      "r2_mean": 0.9824,
+      "r2_std": 0.0002,
+      "mae_mean": 4.0,
+      "mae_std": 0.056,
+      "rmse_mean": 5.029,
+      "rmse_std": 0.064,
+      "fold_r2_scores": [
+        0.9821,
+        0.9827,
+        0.9826,
+        0.9825,
+        0.9823
+      ]
+    },
+    "Decision Tree Regressor": {
+      "r2_mean": 0.9644,
+      "r2_std": 0.0005,
+      "mae_mean": 5.668,
+      "mae_std": 0.084,
+      "rmse_mean": 7.16,
+      "rmse_std": 0.073,
+      "fold_r2_scores": [
+        0.9651,
+        0.9644,
+        0.9648,
+        0.9638,
+        0.964
+      ]
+    }
+  },
+  "residual_diagnostics": {
+    "mean_residual_bias": -0.116,
+    "std_residual": 5.3603,
+    "min_residual": -18.0076,
+    "max_residual": 15.1733,
+    "median_absolute_error": 3.664,
+    "p75_absolute_error": 6.27,
+    "p90_absolute_error": 9.013,
+    "p95_absolute_error": 10.487,
+    "p99_absolute_error": 13.606,
+    "error_within_5_tons_pct": 64.35,
+    "error_within_10_tons_pct": 93.9
+  },
+  "subgroup_accuracy": {
+    "by_crop": [
+      {
+        "subgroup": "Barley",
+        "sample_count": 505,
+        "mean_actual_yield": 115.96,
+        "mean_predicted_yield": 116.28,
+        "r2_score": 0.9823,
+        "mae": 4.208,
+        "rmse": 5.204,
+        "mape_pct": 4.21
+      },
+      {
+        "subgroup": "Maize",
+        "sample_count": 509,
+        "mean_actual_yield": 117.55,
+        "mean_predicted_yield": 117.77,
+        "r2_score": 0.9813,
+        "mae": 4.048,
+        "rmse": 5.144,
+        "mape_pct": 3.91
+      },
+      {
+        "subgroup": "Rice",
+        "sample_count": 497,
+        "mean_actual_yield": 115.56,
+        "mean_predicted_yield": 115.65,
+        "r2_score": 0.9781,
+        "mae": 4.492,
+        "rmse": 5.555,
+        "mape_pct": 4.31
+      },
+      {
+        "subgroup": "Wheat",
+        "sample_count": 489,
+        "mean_actual_yield": 117.75,
+        "mean_predicted_yield": 117.58,
+        "r2_score": 0.9783,
+        "mae": 4.494,
+        "rmse": 5.541,
+        "mape_pct": 4.33
+      }
+    ],
+    "by_region": [
+      {
+        "subgroup": "Region_A",
+        "sample_count": 564,
+        "mean_actual_yield": 116.19,
+        "mean_predicted_yield": 116.36,
+        "r2_score": 0.9803,
+        "mae": 4.277,
+        "rmse": 5.365,
+        "mape_pct": 4.21
+      },
+      {
+        "subgroup": "Region_B",
+        "sample_count": 496,
+        "mean_actual_yield": 115.7,
+        "mean_predicted_yield": 115.87,
+        "r2_score": 0.9826,
+        "mae": 4.17,
+        "rmse": 5.19,
+        "mape_pct": 4.08
+      },
+      {
+        "subgroup": "Region_C",
+        "sample_count": 481,
+        "mean_actual_yield": 119.56,
+        "mean_predicted_yield": 119.59,
+        "r2_score": 0.9783,
+        "mae": 4.344,
+        "rmse": 5.384,
+        "mape_pct": 4.12
+      },
+      {
+        "subgroup": "Region_D",
+        "sample_count": 459,
+        "mean_actual_yield": 115.43,
+        "mean_predicted_yield": 115.5,
+        "r2_score": 0.9785,
+        "mae": 4.457,
+        "rmse": 5.514,
+        "mape_pct": 4.36
+      }
+    ],
+    "by_soil": [
+      {
+        "subgroup": "Clay",
+        "sample_count": 650,
+        "r2_score": 0.9775,
+        "mae": 4.439,
+        "mape_pct": 4.38
+      },
+      {
+        "subgroup": "Loam",
+        "sample_count": 686,
+        "r2_score": 0.9812,
+        "mae": 4.177,
+        "mape_pct": 4.0
+      },
+      {
+        "subgroup": "Sandy",
+        "sample_count": 664,
+        "r2_score": 0.9812,
+        "mae": 4.315,
+        "mape_pct": 4.2
+      }
+    ]
+  },
+  "feature_importances": [
+    {
+      "feature": "Fertilizer_Used_kg",
+      "importance": 0.89954,
+      "importance_pct": 89.95
+    },
+    {
+      "feature": "Rainfall_mm",
+      "importance": 0.08732,
+      "importance_pct": 8.73
+    },
+    {
+      "feature": "Temperature_C",
+      "importance": 0.00277,
+      "importance_pct": 0.28
+    },
+    {
+      "feature": "Planting_Density",
+      "importance": 0.00176,
+      "importance_pct": 0.18
+    },
+    {
+      "feature": "Pesticides_Used_kg",
+      "importance": 0.00174,
+      "importance_pct": 0.17
+    },
+    {
+      "feature": "Humidity_pct",
+      "importance": 0.00173,
+      "importance_pct": 0.17
+    },
+    {
+      "feature": "Soil_pH",
+      "importance": 0.00168,
+      "importance_pct": 0.17
+    },
+    {
+      "feature": "Crop_Rice",
+      "importance": 0.00022,
+      "importance_pct": 0.02
+    },
+    {
+      "feature": "Crop_Maize",
+      "importance": 0.00021,
+      "importance_pct": 0.02
+    },
+    {
+      "feature": "Soil_Type_Sandy",
+      "importance": 0.00021,
+      "importance_pct": 0.02
+    },
+    {
+      "feature": "Previous_Crop_Rice",
+      "importance": 0.00021,
+      "importance_pct": 0.02
+    },
+    {
+      "feature": "Crop_Barley",
+      "importance": 0.0002,
+      "importance_pct": 0.02
+    },
+    {
+      "feature": "Region_Region_D",
+      "importance": 0.0002,
+      "importance_pct": 0.02
+    },
+    {
+      "feature": "Region_Region_A",
+      "importance": 0.00019,
+      "importance_pct": 0.02
+    },
+    {
+      "feature": "Region_Region_B",
+      "importance": 0.00019,
+      "importance_pct": 0.02
+    }
+  ],
+  "production_model": {
+    "algorithm": "RandomForestRegressor(n_estimators=200, random_state=42)",
+    "test_r2": 0.9801,
+    "test_mae": 4.308,
+    "test_rmse": 5.362,
+    "test_mape": 4.19,
+    "generalization_verdict": "VERIFIED PASSED (CV R2: 0.980, <0.001 variance between folds)"
+  }
+}

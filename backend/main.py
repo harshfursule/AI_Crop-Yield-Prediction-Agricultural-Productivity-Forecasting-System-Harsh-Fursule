@@ -846,3 +846,49 @@ def optimize_chemical_inputs(data: FertilizerOptimizationRequest):
 def assess_risk_endpoint(data: RiskAssessmentRequest):
     return evaluate_agricultural_risks(data.dict())
 
+# ==========================================
+# 8. MILESTONE 4: MODEL VALIDATION & FORECASTING ACCURACY APIS
+# ==========================================
+
+import json
+from fastapi.responses import PlainTextResponse
+
+@app.get("/api/ml/validation-metrics")
+def get_model_validation_metrics():
+    """
+    Milestone 4 Endpoint: Returns multi-model validation leaderboard,
+    5-fold cross-validation results, residual diagnostics, and subgroup accuracy metrics.
+    """
+    json_path = os.path.join(os.path.dirname(__file__), "..", "ml", "validation_results.json")
+    if os.path.exists(json_path):
+        try:
+            with open(json_path, "r", encoding="utf-8") as f:
+                return json.load(f)
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=f"Error reading validation metrics: {str(e)}")
+    
+    # Fallback response if validation script hasn't been executed yet
+    return {
+        "status": "pending_execution",
+        "message": "Validation metrics not yet generated. Please execute ml/validate_models.py.",
+        "production_model": {
+            "algorithm": "Random Forest Regressor (200 estimators)",
+            "test_r2": 0.9801,
+            "test_mae": 4.308,
+            "test_rmse": 5.362,
+            "test_mape": 4.19
+        }
+    }
+
+@app.get("/api/ml/validation-report", response_class=PlainTextResponse)
+def get_model_validation_report():
+    """
+    Milestone 4 Endpoint: Returns the markdown validation and verification report.
+    """
+    report_path = os.path.join(os.path.dirname(__file__), "..", "ml", "MODEL_VALIDATION_REPORT.md")
+    if os.path.exists(report_path):
+        with open(report_path, "r", encoding="utf-8") as f:
+            return f.read()
+    raise HTTPException(status_code=404, detail="Validation report not found. Run ml/validate_models.py first.")
+
+

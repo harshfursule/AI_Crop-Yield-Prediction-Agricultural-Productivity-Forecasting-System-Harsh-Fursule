@@ -80,8 +80,8 @@ def predict_crop_yield(data: dict):
         predicted_yield = calculate_heuristic_yield(data)
         confidence_score = 88.5
 
-    # Calculate Productivity Score (0 - 100)
-    productivity_score = min(100, max(20, int((predicted_yield / 7.5) * 100)))
+    # Calculate Productivity Score (0 - 100) scaled to dataset maximum ~200 tons/ha
+    productivity_score = min(100, max(20, int((predicted_yield / 200.0) * 100)))
 
     # Calculate Risks
     risks = []
@@ -138,8 +138,8 @@ def generate_ai_insights(data: dict, predicted_yield: float, productivity_score:
 
     insights = []
     
-    # 1. Yield Potential Benchmark
-    baseline_yield = {"Wheat": 3.8, "Rice": 4.5, "Maize": 5.2, "Barley": 3.6}.get(crop, 4.0)
+    # 1. Yield Potential Benchmark (Calibrated to empirical dataset means)
+    baseline_yield = {"Wheat": 118.6, "Rice": 117.2, "Maize": 118.1, "Barley": 117.6}.get(crop, 118.0)
     diff_pct = round(((predicted_yield - baseline_yield) / baseline_yield) * 100.0, 1)
     status_str = f"{abs(diff_pct)}% above" if diff_pct >= 0 else f"{abs(diff_pct)}% below"
     insights.append({
@@ -214,20 +214,21 @@ def generate_ai_insights(data: dict, predicted_yield: float, productivity_score:
     return insights
 
 def calculate_heuristic_yield(data: dict) -> float:
-    crop_base = {"Wheat": 3.8, "Rice": 4.5, "Maize": 5.2, "Soybean": 2.8, "Cotton": 2.2, "Sugarcane": 68.0, "Potato": 22.0}
-    base = crop_base.get(data.get("Crop"), 4.0)
+    crop_base = {"Wheat": 118.6, "Rice": 117.2, "Maize": 118.1, "Barley": 117.6}
+    base = crop_base.get(data.get("Crop"), 118.0)
     
     ph = float(data.get("Soil_pH", 6.5))
-    ph_mult = 1.0 - abs(ph - 6.5) * 0.08
+    ph_mult = 1.0 - abs(ph - 6.5) * 0.04
     
     rain = float(data.get("Rainfall_mm", 800))
-    rain_mult = 1.1 if 600 <= rain <= 1100 else 0.85
+    rain_mult = 1.05 if 600 <= rain <= 1100 else 0.95
     
     fert = float(data.get("Fertilizer_Used_kg", 150))
-    fert_mult = 1.05 if 100 <= fert <= 200 else 0.95
+    # Fertilizer is strongly correlated with yield in dataset (range 50-300 kg/ha corresponds to ~28-207 tons/ha)
+    fert_factor = (fert / 175.0)
     
-    res = base * max(0.6, ph_mult) * rain_mult * fert_mult
-    return round(float(res), 2)
+    res = base * fert_factor * ph_mult * rain_mult
+    return round(float(max(25.0, min(210.0, res))), 2)
 
 def generate_recommendations(data: dict, predicted_yield: float) -> list:
     recs = [
