@@ -22,7 +22,7 @@ function AdminLogin() {
     setLoading(true);
 
     try {
-      const response = await axios.post("http://localhost:8000/api/auth/admin-login", {
+      const response = await axios.post("https://yieldsenseai-backend-95on.onrender.com/api/auth/admin-login", {
         email,
         password,
         passkey

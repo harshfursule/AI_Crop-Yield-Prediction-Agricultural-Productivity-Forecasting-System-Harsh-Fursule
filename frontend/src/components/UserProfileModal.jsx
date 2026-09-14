@@ -21,7 +21,7 @@ function UserProfileModal({ isOpen, onClose }) {
 
     try {
       const res = await axios.put(
-        "http://localhost:8000/api/user/profile",
+        "https://yieldsenseai-backend-95on.onrender.com/api/user/profile",
         {
           name,
           avatar,

@@ -41,7 +41,7 @@ function Dashboard() {
 
   const fetchUserActivity = async () => {
     try {
-      const res = await axios.get("http://localhost:8000/api/user/activity", {
+      const res = await axios.get("https://yieldsenseai-backend-95on.onrender.com/api/user/activity", {
         headers: { Authorization: `Bearer ${token}` }
       });
       setActivity(res.data);
@@ -60,7 +60,7 @@ function Dashboard() {
     setPredictionResult(null);
 
     try {
-      const res = await axios.post("http://localhost:8000/api/predict", formData, {
+      const res = await axios.post("https://yieldsenseai-backend-95on.onrender.com/api/predict", formData, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setPredictionResult(res.data);

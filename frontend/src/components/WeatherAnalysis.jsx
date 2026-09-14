@@ -20,8 +20,8 @@ function WeatherAnalysis() {
     setLoading(true);
     try {
       const [curRes, trendRes] = await Promise.all([
-        axios.get(`http://localhost:8000/api/weather/current?region=${r}`),
-        axios.get(`http://localhost:8000/api/weather/trends?region=${r}`)
+        axios.get(`https://yieldsenseai-backend-95on.onrender.com/api/weather/current?region=${r}`),
+        axios.get(`https://yieldsenseai-backend-95on.onrender.com/api/weather/trends?region=${r}`)
       ]);
       setCurrentWeather(curRes.data.weather);
       setTrends(trendRes.data.seasonal_trend || []);
@@ -40,7 +40,7 @@ function WeatherAnalysis() {
     e.preventDefault();
     try {
       const res = await axios.get(
-        `http://localhost:8000/api/weather/impact?crop=${impactInput.crop}&rainfall_mm=${impactInput.rainfall_mm}&temp_c=${impactInput.temp_c}`
+        `https://yieldsenseai-backend-95on.onrender.com/api/weather/impact?crop=${impactInput.crop}&rainfall_mm=${impactInput.rainfall_mm}&temp_c=${impactInput.temp_c}`
       );
       setImpactResult(res.data);
     } catch (err) {

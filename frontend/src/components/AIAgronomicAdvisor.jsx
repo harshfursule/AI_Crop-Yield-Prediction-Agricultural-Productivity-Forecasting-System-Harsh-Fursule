@@ -45,7 +45,7 @@ function AIAgronomicAdvisor({ token }) {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await axios.post("http://localhost:8000/api/recommend/crop", cropInput, {
+      const res = await axios.post("https://yieldsenseai-backend-95on.onrender.com/api/recommend/crop", cropInput, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setCropResult(res.data);
@@ -60,7 +60,7 @@ function AIAgronomicAdvisor({ token }) {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await axios.post("http://localhost:8000/api/recommend/fertilizer-pesticide", chemInput, {
+      const res = await axios.post("https://yieldsenseai-backend-95on.onrender.com/api/recommend/fertilizer-pesticide", chemInput, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setChemResult(res.data);
@@ -75,7 +75,7 @@ function AIAgronomicAdvisor({ token }) {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await axios.post("http://localhost:8000/api/risk-assessment", riskInput, {
+      const res = await axios.post("https://yieldsenseai-backend-95on.onrender.com/api/risk-assessment", riskInput, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setRiskResult(res.data);

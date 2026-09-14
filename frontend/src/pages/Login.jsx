@@ -21,7 +21,7 @@ function Login() {
     setLoading(true);
 
     try {
-      const response = await axios.post("http://localhost:8000/api/auth/login", {
+      const response = await axios.post("https://yieldsenseai-backend-95on.onrender.com/api/auth/login", {
         email,
         password,
       });
@@ -41,7 +41,7 @@ function Login() {
   };
 
   const handleGoogleLogin = () => {
-    window.location.href = "http://localhost:8000/api/auth/google/login";
+    window.location.href = "https://yieldsenseai-backend-95on.onrender.com/api/auth/google/login";
   };
 
   return (

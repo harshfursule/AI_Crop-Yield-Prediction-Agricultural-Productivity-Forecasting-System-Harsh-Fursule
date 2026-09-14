@@ -20,8 +20,8 @@ function SoilHealthLab({ token }) {
   const fetchSoilAnalysis = async () => {
     try {
       const [anRes, recRes] = await Promise.all([
-        axios.get(`http://localhost:8000/api/soil/analysis?soil_type=${soilType}&ph=${ph}`),
-        axios.get(`http://localhost:8000/api/soil/recommendations?soil_type=${soilType}&ph=${ph}`)
+        axios.get(`https://yieldsenseai-backend-95on.onrender.com/api/soil/analysis?soil_type=${soilType}&ph=${ph}`),
+        axios.get(`https://yieldsenseai-backend-95on.onrender.com/api/soil/recommendations?soil_type=${soilType}&ph=${ph}`)
       ]);
       setAnalysis(anRes.data);
       setRecommendations(recRes.data.recommendations || []);
@@ -32,7 +32,7 @@ function SoilHealthLab({ token }) {
 
   const fetchTestLogs = async () => {
     try {
-      const res = await axios.get("http://localhost:8000/api/soil/tests", {
+      const res = await axios.get("https://yieldsenseai-backend-95on.onrender.com/api/soil/tests", {
         headers: { Authorization: `Bearer ${token}` }
       });
       setTestLogs(res.data.tests || []);
@@ -52,7 +52,7 @@ function SoilHealthLab({ token }) {
   const handleAddTestLog = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:8000/api/soil/tests", form, {
+      await axios.post("https://yieldsenseai-backend-95on.onrender.com/api/soil/tests", form, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setShowModal(false);
@@ -65,7 +65,7 @@ function SoilHealthLab({ token }) {
   const handleDeleteTestLog = async (id) => {
     if (!window.confirm("Delete this soil test record?")) return;
     try {
-      await axios.delete(`http://localhost:8000/api/soil/tests/${id}`, {
+      await axios.delete(`https://yieldsenseai-backend-95on.onrender.com/api/soil/tests/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       fetchTestLogs();

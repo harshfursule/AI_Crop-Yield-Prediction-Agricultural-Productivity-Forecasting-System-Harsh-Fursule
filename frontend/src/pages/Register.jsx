@@ -23,7 +23,7 @@ function Register() {
 
     try {
       // 1. Register User
-      await axios.post("http://localhost:8000/api/auth/register", {
+      await axios.post("https://yieldsenseai-backend-95on.onrender.com/api/auth/register", {
         name,
         email,
         password,
@@ -31,7 +31,7 @@ function Register() {
       });
 
       // 2. Auto Login after registration
-      const loginRes = await axios.post("http://localhost:8000/api/auth/login", {
+      const loginRes = await axios.post("https://yieldsenseai-backend-95on.onrender.com/api/auth/login", {
         email,
         password,
       });
@@ -46,7 +46,7 @@ function Register() {
   };
 
   const handleGoogleRegister = () => {
-    window.location.href = "http://localhost:8000/api/auth/google/login";
+    window.location.href = "https://yieldsenseai-backend-95on.onrender.com/api/auth/google/login";
   };
 
   return (

@@ -18,7 +18,7 @@ function FarmManagement({ token }) {
   const fetchFarms = async () => {
     setLoading(true);
     try {
-      const res = await axios.get("http://localhost:8000/api/farms", {
+      const res = await axios.get("https://yieldsenseai-backend-95on.onrender.com/api/farms", {
         headers: { Authorization: `Bearer ${token}` }
       });
       setFarms(res.data.farms || []);
@@ -36,7 +36,7 @@ function FarmManagement({ token }) {
   const handleCreateFarm = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:8000/api/farms", form, {
+      await axios.post("https://yieldsenseai-backend-95on.onrender.com/api/farms", form, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setShowModal(false);
@@ -49,7 +49,7 @@ function FarmManagement({ token }) {
   const handleDeleteFarm = async (id) => {
     if (!window.confirm("Delete this farm plot profile?")) return;
     try {
-      await axios.delete(`http://localhost:8000/api/farms/${id}`, {
+      await axios.delete(`https://yieldsenseai-backend-95on.onrender.com/api/farms/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       fetchFarms();

@@ -20,7 +20,7 @@ function HarvestHistory({ token, activity, onRefreshActivity }) {
   const fetchHarvestHistory = async () => {
     setLoading(true);
     try {
-      const res = await axios.get("http://localhost:8000/api/crops/history", {
+      const res = await axios.get("https://yieldsenseai-backend-95on.onrender.com/api/crops/history", {
         headers: { Authorization: `Bearer ${token}` }
       });
       setHistory(res.data.history || []);
@@ -38,7 +38,7 @@ function HarvestHistory({ token, activity, onRefreshActivity }) {
   const handleAddHarvest = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:8000/api/crops/history", form, {
+      await axios.post("https://yieldsenseai-backend-95on.onrender.com/api/crops/history", form, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setShowModal(false);
@@ -51,7 +51,7 @@ function HarvestHistory({ token, activity, onRefreshActivity }) {
   const handleDeleteHarvest = async (id) => {
     if (!window.confirm("Delete this historical harvest record?")) return;
     try {
-      await axios.delete(`http://localhost:8000/api/crops/history/${id}`, {
+      await axios.delete(`https://yieldsenseai-backend-95on.onrender.com/api/crops/history/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       fetchHarvestHistory();

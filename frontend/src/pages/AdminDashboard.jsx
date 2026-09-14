@@ -34,9 +34,9 @@ function AdminDashboard() {
     try {
       const headers = { Authorization: `Bearer ${token}` };
       const [statsRes, usersRes, logsRes] = await Promise.all([
-        axios.get("http://localhost:8000/api/admin/stats", { headers }),
-        axios.get("http://localhost:8000/api/admin/users", { headers }),
-        axios.get("http://localhost:8000/api/admin/audit-logs", { headers })
+        axios.get("https://yieldsenseai-backend-95on.onrender.com/api/admin/stats", { headers }),
+        axios.get("https://yieldsenseai-backend-95on.onrender.com/api/admin/users", { headers }),
+        axios.get("https://yieldsenseai-backend-95on.onrender.com/api/admin/audit-logs", { headers })
       ]);
 
       setStats(statsRes.data);
@@ -53,7 +53,7 @@ function AdminDashboard() {
   const fetchValidationMetrics = async () => {
     setLoadingMetrics(true);
     try {
-      const res = await axios.get("http://localhost:8000/api/ml/validation-metrics");
+      const res = await axios.get("https://yieldsenseai-backend-95on.onrender.com/api/ml/validation-metrics");
       setValidationMetrics(res.data);
     } catch (err) {
       console.error("Error fetching validation metrics:", err);
@@ -64,7 +64,7 @@ function AdminDashboard() {
 
   const handleOpenReportModal = async () => {
     try {
-      const res = await axios.get("http://localhost:8000/api/ml/validation-report");
+      const res = await axios.get("https://yieldsenseai-backend-95on.onrender.com/api/ml/validation-report");
       setReportText(res.data);
       setReportModalOpen(true);
     } catch (err) {
@@ -88,7 +88,7 @@ function AdminDashboard() {
       if (reportText) {
         downloadBlob(reportText, "MODEL_VALIDATION_REPORT.md");
       } else {
-        const res = await axios.get("http://localhost:8000/api/ml/validation-report");
+        const res = await axios.get("https://yieldsenseai-backend-95on.onrender.com/api/ml/validation-report");
         setReportText(res.data);
         downloadBlob(res.data, "MODEL_VALIDATION_REPORT.md");
       }
@@ -106,7 +106,7 @@ function AdminDashboard() {
     const newRole = currentRole === "admin" ? "user" : "admin";
     try {
       await axios.put(
-        `http://localhost:8000/api/admin/users/${targetEmail}/role`,
+        `https://yieldsenseai-backend-95on.onrender.com/api/admin/users/${targetEmail}/role`,
         { role: newRole },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -121,7 +121,7 @@ function AdminDashboard() {
     const newStatus = currentStatus === "blocked" ? "active" : "blocked";
     try {
       await axios.put(
-        `http://localhost:8000/api/admin/users/${targetEmail}/status`,
+        `https://yieldsenseai-backend-95on.onrender.com/api/admin/users/${targetEmail}/status`,
         { status: newStatus },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -135,7 +135,7 @@ function AdminDashboard() {
   const handleDeleteUser = async (targetEmail) => {
     if (!window.confirm(`Are you sure you want to delete user ${targetEmail}?`)) return;
     try {
-      await axios.delete(`http://localhost:8000/api/admin/users/${targetEmail}`, {
+      await axios.delete(`https://yieldsenseai-backend-95on.onrender.com/api/admin/users/${targetEmail}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setMessage({ type: "success", text: `Deleted user ${targetEmail}` });

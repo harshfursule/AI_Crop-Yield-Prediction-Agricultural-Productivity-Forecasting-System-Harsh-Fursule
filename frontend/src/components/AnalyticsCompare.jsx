@@ -12,7 +12,7 @@ function AnalyticsCompare({ token }) {
 
   const fetchTrends = async () => {
     try {
-      const res = await axios.get("http://localhost:8000/api/analytics/seasonal-trends", {
+      const res = await axios.get("https://yieldsenseai-backend-95on.onrender.com/api/analytics/seasonal-trends", {
         headers: { Authorization: `Bearer ${token}` }
       });
       setTrends(res.data.trends || []);
@@ -23,7 +23,7 @@ function AnalyticsCompare({ token }) {
 
   const fetchComparison = async (c1, c2) => {
     try {
-      const res = await axios.get(`http://localhost:8000/api/analytics/compare?crop1=${c1}&crop2=${c2}`, {
+      const res = await axios.get(`https://yieldsenseai-backend-95on.onrender.com/api/analytics/compare?crop1=${c1}&crop2=${c2}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setComparison(res.data.comparison || null);
@@ -44,7 +44,7 @@ function AnalyticsCompare({ token }) {
     setLoading(true);
     setExportMsg(null);
     try {
-      const res = await axios.get("http://localhost:8000/api/reports/export/PREDICTION-1001", {
+      const res = await axios.get("https://yieldsenseai-backend-95on.onrender.com/api/reports/export/PREDICTION-1001", {
         headers: { Authorization: `Bearer ${token}` }
       });
       setExportMsg(res.data);
