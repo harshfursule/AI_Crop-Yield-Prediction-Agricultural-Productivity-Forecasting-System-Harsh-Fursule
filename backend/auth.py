@@ -1,4 +1,5 @@
 import os
+from urllib.parse import urlencode
 import bcrypt
 import requests
 from jose import jwt
@@ -11,10 +12,18 @@ load_dotenv()
 SECRET_KEY = os.getenv("JWT_SECRET", "yieldsense_jwt_secret_key_2026_super_secure")
 ALGORITHM = "HS256"
 
-GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID", "your_google_client_id_here.apps.googleusercontent.com")
-GOOGLE_CLIENT_SECRET = os.getenv("GOOGLE_CLIENT_SECRET", "your_google_client_secret_here")
-GOOGLE_REDIRECT_URI = os.getenv("GOOGLE_REDIRECT_URI", "http://localhost:8000/api/auth/callback/google")
-FRONTEND_URL = os.getenv("FRONTEND_URL", "https://ai-crop-yield-prediction-agricultur.vercel.app")
+GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID", "")
+GOOGLE_CLIENT_SECRET = os.getenv("GOOGLE_CLIENT_SECRET", "")
+# Clean fallback to production Render callback URI
+GOOGLE_REDIRECT_URI = os.getenv(
+    "GOOGLE_REDIRECT_URI", 
+    "https://yieldsenseai-backend-95on.onrender.com/api/auth/callback/google"
+).strip()
+# Clean fallback to production Vercel frontend URI
+FRONTEND_URL = os.getenv(
+    "FRONTEND_URL", 
+    "https://ai-crop-yield-prediction-agricultur.vercel.app"
+).strip()
 
 MEMORY_USERS = []
 MEMORY_AUDIT_LOGS = []
@@ -257,15 +266,11 @@ def is_google_client_configured() -> bool:
     return bool(GOOGLE_CLIENT_ID and "your_google_client_id" not in GOOGLE_CLIENT_ID)
 
 def get_google_oauth_url() -> str:
-    """Generates official Google OAuth 2.0 authorization URL or local demo URL."""
-    if not is_google_client_configured():
-        # Smart dev fallback URL to bypass Google 401 invalid_client error during local testing
-        return "http://localhost:8000/api/auth/callback/google?code=demo_oauth_code"
-
+    """Generates official Google OAuth 2.0 authorization URL."""
     base_url = "https://accounts.google.com/o/oauth2/v2/auth"
     params = {
         "client_id": GOOGLE_CLIENT_ID,
-        "redirect_uri": GOOGLE_REDIRECT_URI,
+        "redirect_uri": GOOGLE_REDIRECT_URI.strip(),
         "response_type": "code",
         "scope": "openid email profile",
         "access_type": "offline",
@@ -276,24 +281,14 @@ def get_google_oauth_url() -> str:
 
 def handle_google_oauth_callback(code: str):
     """
-    Exchanges OAuth code for Google profile data, manages database lookup / creation,
-    generates session JWT, and determines smart role-based redirect URL.
+    Exchanges OAuth code for Google profile data and generates redirect response.
     """
-    # Check if this is the demo testing code or real Google code
-    if not is_google_client_configured() or code == "demo_oauth_code":
-        return process_google_profile({
-            "id": "109876543210987654321",
-            "email": "harshfursule@gmail.com",
-            "name": "Harsh Fursule (Google)",
-            "picture": "https://api.dicebear.com/7.x/avataaars/svg?seed=HarshFursule"
-        })
-
     token_url = "https://oauth2.googleapis.com/token"
     token_payload = {
         "code": code,
         "client_id": GOOGLE_CLIENT_ID,
         "client_secret": GOOGLE_CLIENT_SECRET,
-        "redirect_uri": GOOGLE_REDIRECT_URI,
+        "redirect_uri": GOOGLE_REDIRECT_URI.strip(),
         "grant_type": "authorization_code"
     }
 
@@ -303,12 +298,10 @@ def handle_google_oauth_callback(code: str):
         google_token = token_json.get("access_token")
 
         if not google_token:
-            return process_google_profile({
-                "id": "109876543210987654321",
-                "email": "harshfursule@gmail.com",
-                "name": "Harsh Fursule (Google)",
-                "picture": "https://api.dicebear.com/7.x/avataaars/svg?seed=HarshFursule"
-            })
+            clean_frontend = FRONTEND_URL.strip().rstrip("/")
+            return {
+                "redirect_url": f"{clean_frontend}/login?error=oauth_token_failed"
+            }
 
         userinfo_url = "https://www.googleapis.com/oauth2/v2/userinfo"
         userinfo_res = requests.get(userinfo_url, headers={"Authorization": f"Bearer {google_token}"}, timeout=10)
@@ -317,12 +310,10 @@ def handle_google_oauth_callback(code: str):
 
     except Exception as e:
         print("Google OAuth error:", e)
-        return process_google_profile({
-            "id": "109876543210987654321",
-            "email": "harshfursule@gmail.com",
-            "name": "Harsh Fursule (Google)",
-            "picture": "https://api.dicebear.com/7.x/avataaars/svg?seed=HarshFursule"
-        })
+        clean_frontend = FRONTEND_URL.strip().rstrip("/")
+        return {
+            "redirect_url": f"{clean_frontend}/login?error=oauth_exception"
+        }
 
 def process_google_profile(profile: dict):
     google_id = str(profile.get("id") or profile.get("sub"))
@@ -363,7 +354,6 @@ def process_google_profile(profile: dict):
             MEMORY_USERS.append(user)
         log_audit_event(email, "GOOGLE_OAUTH_REGISTER", "New user registered via Google OAuth 2.0", "user")
     else:
-        user_id_str = str(user.get("_id", user["email"]))
         if get_mongo_active():
             try:
                 users_collection.update_one(
@@ -376,14 +366,22 @@ def process_google_profile(profile: dict):
         user["picture_url"] = picture_url
         user["avatar"] = picture_url
         log_audit_event(email, "GOOGLE_OAUTH_LOGIN", f"Existing user logged in via Google OAuth ({user.get('role', 'user')})", user.get("role", "user"))
-
     user_id = str(user.get("_id", user["email"]))
     role = user.get("role", "user")
 
     token_data = create_jwt_token(user_id, email, user.get("name", name), role)
 
     target_path = "/admin" if role == "admin" else "/dashboard"
-    redirect_url = f"{FRONTEND_URL}{target_path}?token={token_data['access_token']}&user_id={user_id}&name={user.get('name', name)}&email={email}&role={role}&avatar={picture_url}"
+    clean_frontend = FRONTEND_URL.strip().rstrip("/")
+    params = urlencode({
+        "token": token_data["access_token"],
+        "user_id": user_id,
+        "name": user.get("name", name),
+        "email": email,
+        "role": role,
+        "avatar": picture_url
+    })
+    redirect_url = f"{clean_frontend}{target_path}?{params}"
 
     return {
         "redirect_url": redirect_url,
@@ -396,3 +394,4 @@ def process_google_profile(profile: dict):
             "role": role
         }
     }
+
